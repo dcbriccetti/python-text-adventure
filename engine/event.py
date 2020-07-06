@@ -4,13 +4,13 @@ from random import random
 class Event:
     'A game event, including the probability of its happening.'
 
-    def __init__(self, probability, message, health_change, max_occurrences=100000):
+    def __init__(self, probability: float, message: str, health_change: int, max_occurrences: int = 100000):
         self.probability = probability
         self.message = message
         self.health_change = health_change
         self.remaining_occurrences = max_occurrences
 
-    def process(self):
+    def process(self) -> int:
         'Process the event, and return the change in health, or 0.'
 
         if self.remaining_occurrences and random() < self.probability:

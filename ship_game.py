@@ -1,4 +1,4 @@
-from engine.game import Game
+from engine.game import Game, mt
 from engine.inventory_item import InventoryItem
 from engine.place import Place
 from engine.event import Event
@@ -12,7 +12,7 @@ class ShipGame(Game):
 
         bridge = Place('Bridge',
             "You are on the bridge of a spaceship, sitting in the captain's chair.", (
-                Event(0.01, 'An intruder beams onto the bridge and shoots you.', -50, max_occurrences=1),
+                Event(0.01, 'Oh, no! An intruder beams onto the bridge and shoots you.', -50, max_occurrences=1),
                 Event(0.1, "The ship's doctor gives you a health boost.", 30),
             ))
 
@@ -40,16 +40,13 @@ class ShipGame(Game):
             Event(.3, 'You found the experience relaxing', +10),
         ))
 
-        def mt(places):  # Make Transitions
-            return [Transition(place) for place in places]
-
-        bridge          .transitions = mt((ready_room, lift))
-        ready_room      .transitions = mt((bridge,))
-        lift            .transitions = mt((bridge, lounge, storage_room, transporter_room))
-        lounge          .transitions = mt((lift,))
-        storage_room    .transitions = mt((lift,))
+        bridge          .transitions = mt(ready_room, lift)
+        ready_room      .transitions = mt(bridge)
+        lift            .transitions = mt(bridge, lounge, storage_room, transporter_room)
+        lounge          .transitions = mt(lift)
+        storage_room    .transitions = mt(lift)
         transporter_room.transitions = (Transition(planet, (space_suit,)), Transition(lift))
-        planet          .transitions = mt((transporter_room,))
+        planet          .transitions = mt(transporter_room)
 
         self.location = bridge
 
