@@ -1,7 +1,26 @@
 from random import random, choice
-from typing import Sequence
+from typing import Sequence, List
 from engine.inventory_item import InventoryItem
 from engine.transition import Transition
+from engine.place import Place
+
+
+def _dump_place(place: Place, explored: List[Place]):
+    explored.append(place)
+    print(place)
+
+    for event in place.events:
+        print(f'\t{event}')
+
+    for item in place.inventory_items:
+        print(f'\tItem: {item}')
+
+    print(f'\tTransitions: {", ".join([t.place.title for t in place.transitions])}')
+
+    for transition in place.transitions:
+        if transition.place not in explored:
+            explored.append(transition.place)
+            _dump_place(transition.place, explored)
 
 
 class Game:
@@ -26,6 +45,9 @@ class Game:
             print(f'{self.condition_description}: {self.condition}, Items:',
                   ', '.join([i.name for i in self.inventory]) if self.inventory else 'None')
             self._transition()
+
+    def dump(self):
+        _dump_place(self.location, [])
 
     def acquire_items(self):
         acquired_items = [i for i in self.location.inventory_items if random() < i.acquire_probability]

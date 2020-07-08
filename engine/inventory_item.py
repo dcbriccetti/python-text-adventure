@@ -6,4 +6,4 @@ class InventoryItem:
         self.acquire_probability = acquire_probability
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, acquire probability: {self.acquire_probability}'

@@ -12,3 +12,7 @@ class Place:
         self.description = description
         self.events = events
         self.inventory_items = list(inventory_items)
+        self.transitions = []
+
+    def __str__(self) -> str:
+        return f'{self.title}: {self.description}'

@@ -19,3 +19,7 @@ class Event:
             return self.health_change
 
         return 0
+
+    def __str__(self) -> str:
+        return f'Event: {self.message}, Chance: {self.probability}, condition: {self.health_change}'
+
