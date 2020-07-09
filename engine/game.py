@@ -15,7 +15,8 @@ def _dump_place(place: Place, explored: List[Place]):
     for item in place.inventory_items:
         print(f'\tItem: {item}')
 
-    print(f'\tTransitions: {", ".join([t.place.title for t in place.transitions])}')
+    for transition in place.transitions:
+        print(f'\tTransition: {transition}')
 
     for transition in place.transitions:
         if transition.place not in explored:
@@ -47,6 +48,7 @@ class Game:
             self._transition()
 
     def dump(self):
+        print(self.introduction)
         _dump_place(self.location, [])
 
     def acquire_items(self):

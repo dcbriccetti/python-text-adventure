@@ -9,7 +9,7 @@ class Simple(Game):
     def __init__(self):
         super(Simple, self).__init__()
         self.condition_description = 'Happiness'
-        self.introduction = 'Welcome to A Simple Game'
+        self.introduction = 'Welcome to Coding Party'
 
         home = Place('Home', "You are at home.")
         home.add_events(Event(0.5, "Your dog wags its tail.", 5))
@@ -19,7 +19,7 @@ class Simple(Game):
         library = Place('Library', "You are at the library.")
         library.add_events(Event(.1, 'Someone talks loudly', -10, max_occurrences=1))
         programming_book = InventoryItem('Programming Book', acquire_probability=0.5)
-        library.add_items(programming_book, coding_party_invitation)
+        library.add_items(programming_book)
 
         coding_party = Place('Coding Party', 'A group of interesting people has gathered to write code.')
         coding_party.add_events(
