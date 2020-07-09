@@ -1,5 +1,5 @@
 from typing import Sequence
-from engine.transition import Transition
+import engine.transition
 from engine.event import Event
 from engine.inventory_item import InventoryItem
 
@@ -25,10 +25,10 @@ class Place:
 
     def add_transitions(self, *transitions):
         for t in transitions:
-            if isinstance(t, Transition):
+            if isinstance(t, engine.transition.Transition):
                 self.transitions.append(t)
             elif isinstance(t, Place):
-                self.transitions.append(Transition(t))
+                self.transitions.append(engine.transition.Transition(t))
 
     def __str__(self) -> str:
         return f'{self.title}: {self.description}'

@@ -1,9 +1,9 @@
-# from engine.place import Place  todo resolve circular import
-from engine.inventory_item import InventoryItem
+import engine.place
+import engine.inventory_item
 
 
 class Transition:
-    def __init__(self, place, *must_have: InventoryItem):
+    def __init__(self, place: engine.place.Place, *must_have: engine.inventory_item.InventoryItem):
         self.place = place
         self.must_have = must_have
 
