@@ -13,8 +13,8 @@ class Simple(Game):
 
         home = Place('Home', 'You are at home.')
         wag_event = Event(0.7, 'Your dog wags its tail.', 5)
-        lamp_event = Event(0.9, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
-        fire_event = Event(0.9, 'The lamp starts a fire.', -1000)
+        lamp_event = Event(0.8, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
+        fire_event = Event(0.3, 'The lamp starts a fire.', -1000)
         lamp_event.chain(fire_event)
         wag_event.chain(lamp_event)
         home.add_events(wag_event)
@@ -27,9 +27,12 @@ class Simple(Game):
         library.add_items(programming_book)
 
         coding_party = Place('Coding Party', 'A group of interesting people has gathered to write code.')
+        prize_event = Event(0.7, 'You win a prize for most obfuscated code', 50)
+        prize_event.add_items(InventoryItem('Most Obfuscated Code Prize'))
         coding_party.add_events(
             Event(0.6, 'Someone teaches you some Python', 20),
-            Event(0.1, 'A mean person laughs at your code', -20)
+            Event(0.1, 'A mean person laughs at your code', -20),
+            prize_event
         )
 
         home.add_transitions(library)

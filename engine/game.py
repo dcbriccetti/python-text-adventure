@@ -8,6 +8,9 @@ from engine.event import Event
 
 def _dump_event(event: Event, level = 1):
     print(('\t' * level) + str(event))
+    for item in event.inventory_items:
+        print(('\t' * (level + 1)) + f'Item: {item}')
+
     for event in event.chained_events:
         _dump_event(event, level + 1)
 
@@ -67,7 +70,7 @@ class Game:
 
     def process_events(self):
         for event in self.location.events:
-            self.condition += event.process()
+            self.condition += event.process(self.inventory)
             if self.condition <= 0:
                 goodbyes = ("That's it for you!", 'You lose.', 'So long.')
                 print(choice(goodbyes))
