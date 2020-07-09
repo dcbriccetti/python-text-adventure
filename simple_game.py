@@ -11,13 +11,18 @@ class Simple(Game):
         self.condition_description = 'Happiness'
         self.introduction = 'Welcome to Coding Party'
 
-        home = Place('Home', "You are at home.")
-        home.add_events(Event(0.5, "Your dog wags its tail.", 5))
+        home = Place('Home', 'You are at home.')
+        wag_event = Event(0.7, 'Your dog wags its tail.', 5)
+        lamp_event = Event(0.9, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
+        fire_event = Event(0.9, 'The lamp starts a fire.', -1000)
+        lamp_event.chain(fire_event)
+        wag_event.chain(lamp_event)
+        home.add_events(wag_event)
         coding_party_invitation = InventoryItem('Coding party invitation', acquire_probability=0.8)
         home.add_items(coding_party_invitation)
 
-        library = Place('Library', "You are at the library.")
-        library.add_events(Event(.1, 'Someone talks loudly', -10, max_occurrences=1))
+        library = Place('Library', 'You are at the library.')
+        library.add_events(Event(.1, 'Someone talks loudly.', -10, max_occurrences=1))
         programming_book = InventoryItem('Programming Book', acquire_probability=0.5)
         library.add_items(programming_book)
 

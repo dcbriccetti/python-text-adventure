@@ -4,22 +4,30 @@ from random import random
 class Event:
     'A game event, including the probability of its happening.'
 
-    def __init__(self, probability: float, message: str, health_change: int, max_occurrences: int = 100000):
+    def __init__(self, probability: float, message: str, condition_change: int, max_occurrences: int = 100000):
         self.probability = probability
         self.message = message
-        self.health_change = health_change
+        self.condition_change = condition_change
         self.remaining_occurrences = max_occurrences
+        self.chained_events = []
 
     def process(self) -> int:
         'Process the event, and return the change in health, or 0.'
 
+        condition_change_sum = 0
         if self.remaining_occurrences and random() < self.probability:
             self.remaining_occurrences -= 1
             print(self.message)
-            return self.health_change
+            condition_change_sum += self.condition_change
+            for event in self.chained_events:
+                condition_change_sum += event.process()
 
-        return 0
+        return condition_change_sum
+
+    def chain(self, *events):
+        for event in events:
+            self.chained_events.append(event)
 
     def __str__(self) -> str:
-        return f'Event: {self.message}, Chance: {self.probability}, Condition: {self.health_change}'
+        return f'Event: {self.message}, Chance: {self.probability}, Condition: {self.condition_change}'
 

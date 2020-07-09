@@ -3,6 +3,13 @@ from typing import Sequence, List
 from engine.inventory_item import InventoryItem
 from engine.transition import Transition
 from engine.place import Place
+from engine.event import Event
+
+
+def _dump_event(event: Event, level = 1):
+    print(('\t' * level) + str(event))
+    for event in event.chained_events:
+        _dump_event(event, level + 1)
 
 
 def _dump_place(place: Place, explored: List[Place]):
@@ -10,7 +17,7 @@ def _dump_place(place: Place, explored: List[Place]):
     print(place)
 
     for event in place.events:
-        print(f'\t{event}')
+        _dump_event(event)
 
     for item in place.inventory_items:
         print(f'\tItem: {item}')
