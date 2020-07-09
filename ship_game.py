@@ -45,7 +45,7 @@ class ShipGame(Game):
         lift            .transitions = mt(bridge, lounge, storage_room, transporter_room)
         lounge          .transitions = mt(lift)
         storage_room    .transitions = mt(lift)
-        transporter_room.transitions = (Transition(planet, (space_suit,)), Transition(lift))
+        transporter_room.transitions = (Transition(planet, space_suit), Transition(lift))
         planet          .transitions = mt(transporter_room)
 
         self.location = bridge
