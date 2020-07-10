@@ -14,6 +14,7 @@ class Place:
         self.events = list(events)
         self.inventory_items = list(inventory_items)
         self.transitions = []
+        self.activities = []
 
     def add_events(self, *events: Event):
         for event in events:
@@ -22,6 +23,10 @@ class Place:
     def add_items(self, *items: InventoryItem):
         for item in items:
             self.inventory_items.append(item)
+
+    def add_activities(self, *activities):
+        for activity in activities:
+            self.inventory_items.append(activity)
 
     def add_transitions(self, *transitions):
         for t in transitions:
