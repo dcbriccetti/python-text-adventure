@@ -1,3 +1,5 @@
+'An example game using the text adventure engine.'
+
 from engine.game import Game, mt
 from engine.inventory_item import InventoryItem
 from engine.place import Place
@@ -51,5 +53,6 @@ class ShipGame(Game):
         self.location = bridge
 
 
-game = ShipGame()
-game.play()
+if __name__ == '__main__':
+    game = ShipGame()
+    game.play()

@@ -6,7 +6,7 @@ from engine.place import Place
 from engine.event import Event
 
 
-def _dump_event(event: Event, level = 1):
+def _dump_event(event: Event, level=1):
     print(('\t' * level) + str(event))
     for item in event.inventory_items:
         print(('\t' * (level + 1)) + f'Item: {item}')
@@ -35,7 +35,10 @@ def _dump_place(place: Place, explored: List[Place]):
 
 
 class Game:
-    'The main code for running the game. Extend this class for your game. See simple_game.py or shipgame.py for examples.'
+    '''
+    The main code for running the game. Extend this class for your game.
+    See simple_game.py or ship_game.py for examples.
+    '''
 
     def __init__(self):
         self.condition = 100
@@ -45,30 +48,32 @@ class Game:
         self.location = None
 
     def play(self):
+        'Play the game.'
         print(self.introduction)
 
         while True:
             print()
             print(self.location.description)
-            self.acquire_items()
-            self.process_events()
+            self._acquire_items()
+            self._process_events()
 
             print(f'{self.condition_description}: {self.condition}, Items:',
                   ', '.join([i.name for i in self.inventory]) if self.inventory else 'None')
             self._transition()
 
     def dump(self):
+        'dump the contents of the game, without playing it.'
         print(self.introduction)
         _dump_place(self.location, [])
 
-    def acquire_items(self):
+    def _acquire_items(self):
         acquired_items = [i for i in self.location.inventory_items if random() < i.acquire_probability]
         for item in acquired_items:
             print('You found: ' + item.name)
             self.inventory.append(item)
             self.location.inventory_items.remove(item)
 
-    def process_events(self):
+    def _process_events(self):
         for event in self.location.events:
             self.condition += event.process(self.inventory)
             if self.condition <= 0:
@@ -89,14 +94,14 @@ class Game:
         for (index, transition) in enumerate(transitions):
             print(index + 1, transition.place.title)
 
-        choice_number = get_numeric('Choose one, or enter 0 to exit: ', len(transitions))
+        choice_number = _get_numeric('Choose one, or enter 0 to exit: ', len(transitions))
         if choice_number:
             self.location = transitions[choice_number - 1].place
         else:
             exit(0)
 
 
-def get_numeric(prompt: str, highest: int):
+def _get_numeric(prompt: str, highest: int):
     while True:
         response = input(prompt)
         try:
@@ -109,6 +114,6 @@ def get_numeric(prompt: str, highest: int):
             print("Please enter a number.")
 
 
-def mt(*places):
+def mt(*places: Place):
     'Make simple transitions to the specified places'
     return [Transition(place) for place in places]
