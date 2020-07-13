@@ -2,11 +2,13 @@ import engine.inventory_item
 
 
 class Activity:
-    def __init__(self, description: str, *must_have: engine.inventory_item.InventoryItem):
+    '''
+    An activity that may be available in a place.
+    '''
+    def __init__(self, description: str, action, *must_have: engine.inventory_item.InventoryItem):
         self.description = description
+        self.action = action
         self.must_have = must_have
-        self.events = []
 
-    def add_events(self, *events):
-        for event in events:
-            self.events.append(event)
+    def run(self):
+        self.action()

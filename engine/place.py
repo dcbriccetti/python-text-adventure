@@ -2,6 +2,7 @@ from typing import Sequence, Union
 import engine.transition
 from engine.event import Event
 from engine.inventory_item import InventoryItem
+from engine.activity import Activity
 
 
 class Place:
@@ -35,9 +36,9 @@ class Place:
         for item in items:
             self.inventory_items.append(item)
 
-    def add_activities(self, *activities):
+    def add_activities(self, *activities: Activity):
          for activity in activities:
-             self.inventory_items.append(activity)
+             self.activities.append(activity)
 
     def add_transitions(self, *targets: Union['Place', 'engine.transition.Transition']):
         '''

@@ -25,6 +25,10 @@ class Simple(Game):
         coding_party_invitation = InventoryItem('Coding party invitation', acquire_probability=0.8)
         home.add_items(coding_party_invitation)
 
+        # Math Circle
+        math_circle = Place('Math Circle', 'A fun place to do math')
+        math_circle.add_activities(Activity('Solve a math problem', self.solve_math_problem))
+
         # Library
         library = Place('Library', 'You are at the library.')
         library.add_events(Event(.1, 'Someone talks loudly.', -10, max_occurrences=1))
@@ -43,13 +47,26 @@ class Simple(Game):
         )
 
         # Transitions
-        home.add_transitions(library)
-        home.add_activities(Activity('You celebrate your code prize', code_prize))
+        home.add_transitions(math_circle, library)
+        math_circle.add_transitions(home)
         library.add_transitions(home, Transition(coding_party, programming_book, coding_party_invitation))
         coding_party.add_transitions(library, home)
 
         # Starting place
         self.location = home
+
+    def solve_math_problem(self):
+        from random import randint
+        m1 = randint(2,5)
+        m2 = randint(11,19)
+        product = m1 * m2
+        answer = int(input(f'{m1} * {m2} = ? '))
+        if answer == product:
+            print('Right!')
+            self.condition += 10
+        else:
+            print('Oops!')
+            self.condition -= 2
 
 
 if __name__ == '__main__':

@@ -59,7 +59,7 @@ class Game:
 
             print(f'{self.condition_description}: {self.condition}, Items:',
                   ', '.join([i.name for i in self.inventory]) if self.inventory else 'None')
-            self._transition()
+            self._act_and_transition(self.location)
 
     def dump(self):
         'dump the contents of the game, without playing it.'
@@ -88,18 +88,29 @@ class Game:
     def _available_transitions(self):
         return [t for t in self.location.transitions if self._have_all(t.must_have)]
 
-    def _transition(self):
+    def _available_activities(self, place: Place):
+        return [a for a in place.activities if self._have_all(a.must_have)]
+
+    def _act_and_transition(self, place: Place):
+        activities = self._available_activities(place)
         transitions = self._available_transitions()
-        print('You can go to these places:')
+        print('Please choose: ')
+
+        if activities:
+            for (index, activity) in enumerate(activities):
+                print(index + 1, activity.description)
+
         for (index, transition) in enumerate(transitions):
-            print(index + 1, transition.place.title)
+            print(len(activities) + index + 1, transition.place.title)
 
-        choice_number = _get_numeric('Choose one, or enter 0 to exit: ', len(transitions))
-        if choice_number:
-            self.location = transitions[choice_number - 1].place
-        else:
+        choice_number = _get_numeric('Choose one, or enter 0 to exit: ', len(activities) + len(transitions))
+        if choice_number == 0:
             exit(0)
-
+        elif choice_number - 1 < len(activities):
+            activity = activities[choice_number - 1]
+            activity.run()
+        else:
+            self.location = transitions[choice_number - len(activities) - 1].place
 
 def _get_numeric(prompt: str, highest: int):
     while True:
