@@ -1,5 +1,6 @@
 'A simple example game using the text adventure engine.'
 
+from engine.activity import Activity
 from engine.game import Game
 from engine.inventory_item import InventoryItem
 from engine.place import Place
@@ -33,7 +34,8 @@ class Simple(Game):
         # Coding Party
         coding_party = Place('Coding Party', 'A group of interesting people has gathered to write code.')
         prize_event = Event(0.7, 'You win a prize for most obfuscated code', 50)
-        prize_event.add_items(InventoryItem('Most Obfuscated Code Prize'))
+        code_prize = InventoryItem('Most Obfuscated Code Prize')
+        prize_event.add_items(code_prize)
         coding_party.add_events(
             Event(0.6, 'Someone teaches you some Python', 20),
             Event(0.1, 'A mean person laughs at your code', -20),
@@ -42,6 +44,7 @@ class Simple(Game):
 
         # Transitions
         home.add_transitions(library)
+        home.add_activities(Activity('You celebrate your code prize', code_prize))
         library.add_transitions(home, Transition(coding_party, programming_book, coding_party_invitation))
         coding_party.add_transitions(library, home)
 

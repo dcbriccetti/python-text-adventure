@@ -23,6 +23,7 @@ class Place:
         self.events = list(events)
         self.inventory_items = list(inventory_items)
         self.transitions = []
+        self.activities = []
 
     def add_events(self, *events: Event):
         'Add one or more events to this place.'
@@ -33,6 +34,10 @@ class Place:
         'Add one or more inventory items to this place.'
         for item in items:
             self.inventory_items.append(item)
+
+    def add_activities(self, *activities):
+         for activity in activities:
+             self.inventory_items.append(activity)
 
     def add_transitions(self, *targets: Union['Place', 'engine.transition.Transition']):
         '''
