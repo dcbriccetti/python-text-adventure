@@ -10,5 +10,8 @@ class Activity:
         self.action = action
         self.must_have = must_have
 
-    def run(self):
-        self.action()
+    def run(self) -> int:
+        return self.action()
+
+    def __repr__(self) -> str:
+        return self.description

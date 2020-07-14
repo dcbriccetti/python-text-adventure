@@ -16,9 +16,13 @@ class Simple(Game):
 
         # Home
         home = Place('Home', 'You are at home.')
+        relaxation_event = Event(0.75, 'Being at home relaxes you.', 5)
+        relaxation_event.add_else_events(Event(1, 'A neighbor\'s leaf blower bothers you.', -20))
         wag_event = Event(0.7, 'Your dog wags its tail.', 5)
-        lamp_event = Event(0.8, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
+        lamp_event = Event(0.5, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
         fire_event = Event(0.3, 'The lamp starts a fire.', -1000)
+        home.add_events(relaxation_event)
+        # The following events are chained together
         home.add_events(wag_event)    # The dog might wag its tail
         wag_event.chain(lamp_event)   # which could cause the lamp event
         lamp_event.chain(fire_event)  # which could cause a fire
@@ -32,7 +36,7 @@ class Simple(Game):
         # Library
         library = Place('Library', 'You are at the library.')
         library.add_events(Event(.1, 'Someone talks loudly.', -10, max_occurrences=1))
-        programming_book = InventoryItem('Programming Book', acquire_probability=0.5)
+        programming_book = InventoryItem('Programming Book', acquire_probability=0.8)
         library.add_items(programming_book)
 
         # Coding Party

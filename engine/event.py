@@ -18,8 +18,9 @@ class Event:
         self.message = message
         self.condition_change = condition_change
         self.remaining_occurrences = max_occurrences
-        self.chained_events = []
-        self.inventory_items = []
+        self.chained_events: List[Event] = []
+        self.else_events: List[Event] = []
+        self.inventory_items: List[InventoryItem] = []
 
     def process(self, inventory: List[InventoryItem]) -> int:
         '''
@@ -31,11 +32,15 @@ class Event:
         condition_change_sum = 0
         if self.remaining_occurrences and random() < self.probability:
             self.remaining_occurrences -= 1
-            print(self.message)
+            change_sign = '+' if self.condition_change > 0 else ''
+            print(f'{self.message} ({change_sign}{self.condition_change})')
             condition_change_sum += self.condition_change
             for item in self.inventory_items:
                 inventory.append(item)
             for event in self.chained_events:
+                condition_change_sum += event.process(inventory)
+        else:
+            for event in self.else_events:
                 condition_change_sum += event.process(inventory)
 
         return condition_change_sum
@@ -50,5 +55,18 @@ class Event:
         for event in events:
             self.chained_events.append(event)
 
+    def add_else_events(self, *events: 'Event'):
+        '''
+        Add one or more “else” events to an event, so that if the event
+        does not occur, each of the “else” events may occur.
+
+        :param events: one or more “else” events
+        '''
+        for event in events:
+            self.else_events.append(event)
+
     def __str__(self) -> str:
-        return f'Event: {self.message}, Chance: {self.probability}, Condition: {self.condition_change}'
+        return self.str("Condition")
+
+    def str(self, condition_description: str) -> str:
+        return f'Event: {self.message}, Chance: {self.probability}, {condition_description}: {self.condition_change}'
