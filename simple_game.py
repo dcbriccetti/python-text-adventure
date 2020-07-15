@@ -65,13 +65,13 @@ class Simple(Game):
         m2 = randint(11,19)
         product = m1 * m2
         answer = int(input(f'{m1} * {m2} = ? '))
+        change = 10
         if answer == product:
             print('Right!')
-            self.condition += 10
         else:
             print('Oops!')
-            self.condition -= 2
-
+            change = -2
+        return change
 
 if __name__ == '__main__':
     game = Simple()

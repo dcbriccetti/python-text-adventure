@@ -106,9 +106,8 @@ class Game:
         transitions = self._available_transitions()
         print('Please choose: ')
 
-        if activities:
-            for (index, activity) in enumerate(activities):
-                print(index + 1, activity.description)
+        for (index, activity) in enumerate(activities):
+            print(index + 1, activity.description)
 
         for (index, transition) in enumerate(transitions):
             print(len(activities) + index + 1, transition.place.title)
