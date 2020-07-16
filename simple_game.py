@@ -49,6 +49,7 @@ class Simple(Game):
             Event(0.1, 'A mean person laughs at your code', -20),
             prize_event
         )
+        coding_party.add_activities(Activity('Enter a coding competition', self.code_challenge))
 
         # Transitions
         home.add_transitions(math_circle, library)
@@ -64,7 +65,7 @@ class Simple(Game):
         m1 = randint(2,5)
         m2 = randint(11,19)
         product = m1 * m2
-        answer = int(input(f'{m1} * {m2} = ? '))
+        answer = int(input(f'Please solve this problem: {m1} * {m2} = ? '))
         change = 10
         if answer == product:
             print('Right!')
@@ -72,6 +73,22 @@ class Simple(Game):
             print('Oops!')
             change = -2
         return change
+
+
+    def code_challenge(self):
+        from random import random
+        num = random()
+        print('You compete against another programmer to see who can write the best code.')
+        # wwwwwllllt win, lose, tie probability distribution
+        if num < 0.5:    # 5/10 chance
+            message, change = 'Your program is best and you win the competition.', 40
+        elif num < 0.9:  # 4/10 chance
+            message, change = 'Another programmer has better code.', -40
+        else:            # 1/10 chance
+            message, change = 'There is a tie.', 0
+        print(message)
+        return change
+
 
 if __name__ == '__main__':
     game = Simple()

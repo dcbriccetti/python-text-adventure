@@ -1,4 +1,5 @@
 from random import random, choice
+from time import sleep
 from typing import Sequence, List
 from engine.inventory_item import InventoryItem
 from engine.transition import Transition
@@ -57,6 +58,7 @@ class Game:
     def play(self):
         'Play the game.'
         print(self.introduction)
+        sleep(0.5)
         last_location = None
 
         while True:
@@ -79,9 +81,10 @@ class Game:
     def _acquire_items(self):
         acquired_items = [i for i in self.location.inventory_items if random() < i.acquire_probability]
         for item in acquired_items:
-            print('You found: ' + item.name)
+            print('You find: ' + item.name)
             self.inventory.append(item)
             self.location.inventory_items.remove(item)
+            sleep(0.5)
 
     def _process_events(self):
         for event in self.location.events:
@@ -90,6 +93,7 @@ class Game:
                 goodbyes = ("That's it for you!", 'You lose.', 'So long.')
                 print(choice(goodbyes))
                 exit(1)
+            sleep(0.5)
 
     def _have_all(self, must_have: Sequence[InventoryItem]):
         missing = [mh for mh in must_have if mh not in self.inventory]
@@ -116,6 +120,7 @@ class Game:
         if choice_number == 0:
             exit(0)
         elif choice_number - 1 < len(activities):
+            print()
             activity = activities[choice_number - 1]
             change = activity.run()
             print(f'({"+" if change > 0 else ""}{change})')
