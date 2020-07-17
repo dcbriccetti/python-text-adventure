@@ -37,8 +37,8 @@ class Place:
             self.inventory_items.append(item)
 
     def add_activities(self, *activities: Activity):
-         for activity in activities:
-             self.activities.append(activity)
+        for activity in activities:
+            self.activities.append(activity)
 
     def add_transitions(self, *targets: Union['Place', 'engine.transition.Transition']):
         '''

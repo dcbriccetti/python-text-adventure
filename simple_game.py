@@ -1,5 +1,7 @@
 'A simple example game using the text adventure engine.'
 
+from random import randint, choice
+from time import sleep
 from engine.activity import Activity
 from engine.game import Game
 from engine.inventory_item import InventoryItem
@@ -31,7 +33,10 @@ class Simple(Game):
 
         # Math Circle
         math_circle = Place('Math Circle', 'A fun place to do math')
-        math_circle.add_activities(Activity('Solve a math problem', self.solve_math_problem))
+        math_circle.add_activities(
+            Activity('Solve a math problem', self.solve_math_problem),
+            Activity('Roll dice for points', self.roll_dice_for_points)
+        )
 
         # Library
         library = Place('Library', 'You are at the library.')
@@ -49,7 +54,10 @@ class Simple(Game):
             Event(0.1, 'A mean person laughs at your code', -20),
             prize_event
         )
-        coding_party.add_activities(Activity('Enter a coding competition', self.code_challenge))
+        coding_party.add_activities(
+            Activity('Enter a coding competition', self.code_challenge),
+            Activity('Joke of the Day', self.joke_of_the_day),
+        )
 
         # Transitions
         home.add_transitions(math_circle, library)
@@ -61,9 +69,8 @@ class Simple(Game):
         self.location = home
 
     def solve_math_problem(self):
-        from random import randint
-        m1 = randint(2,5)
-        m2 = randint(11,19)
+        m1 = randint(2, 5)
+        m2 = randint(11, 19)
         product = m1 * m2
         answer = int(input(f'Please solve this problem: {m1} * {m2} = ? '))
         change = 10
@@ -74,6 +81,8 @@ class Simple(Game):
             change = -2
         return change
 
+    def roll_dice_for_points(self):
+        return randint(1, 6) + randint(1, 6)
 
     def code_challenge(self):
         from random import random
@@ -89,6 +98,17 @@ class Simple(Game):
         print(message)
         return change
 
+    def joke_of_the_day(self):
+        jokes = (
+            ('Why are leopards bad at hiding?', ' Because they are always spotted .'),
+            ('What did the pirate say on his 80th birthday?', 'Aye Matey .')
+        )
+        joke = choice(jokes)
+        print(joke[0])
+        sleep(4)
+        print(joke[1])
+        sleep(3)  # Pause for laughter
+        return 5
 
 if __name__ == '__main__':
     game = Simple()
