@@ -1,7 +1,7 @@
 'An example game using the text adventure engine.'
 
 from random import randint
-from engine.game import Game, mt
+from engine.game import Game
 from engine.inventory_item import InventoryItem
 from engine.place import Place
 from engine.activity import Activity

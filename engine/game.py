@@ -129,7 +129,7 @@ class Game:
             self.location = transitions[choice_number - len(activities) - 1].place
 
 
-def _get_numeric(prompt: str, highest: int):
+def _get_numeric(prompt: str, highest: int) -> int:
     while True:
         response = input(prompt)
         try:
@@ -140,8 +140,3 @@ def _get_numeric(prompt: str, highest: int):
                 return int_response
         except ValueError:
             print("Please enter a number.")
-
-
-def mt(*places: Place):
-    'Make simple transitions to the specified places'
-    return [Transition(place) for place in places]
