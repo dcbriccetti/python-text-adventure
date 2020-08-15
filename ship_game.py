@@ -46,13 +46,13 @@ class ShipGame(Game):
             Event(.3, 'You found the experience relaxing', +10),
         ))
 
-        bridge          .transitions = mt(ready_room, lift)
-        ready_room      .transitions = mt(bridge)
-        lift            .transitions = mt(bridge, lounge, storage_room, transporter_room)
-        lounge          .transitions = mt(lift)
-        storage_room    .transitions = mt(lift)
-        transporter_room.transitions = (Transition(planet, space_suit), Transition(lift))
-        planet          .transitions = mt(transporter_room)
+        bridge          .add_transitions(ready_room, lift)
+        ready_room      .add_transitions(bridge)
+        lift            .add_transitions(bridge, lounge, storage_room, transporter_room)
+        lounge          .add_transitions(lift)
+        storage_room    .add_transitions(lift)
+        transporter_room.add_transitions(Transition(planet, space_suit), Transition(lift))
+        planet          .add_transitions(transporter_room)
 
         self.location = bridge
 

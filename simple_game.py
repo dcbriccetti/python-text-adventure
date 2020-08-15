@@ -20,14 +20,12 @@ class Simple(Game):
         home = Place('Home', 'You are at home.')
         relaxation_event = Event(0.75, 'Being at home relaxes you.', 5)
         relaxation_event.add_else_events(Event(1, 'A neighbor\'s leaf blower bothers you.', -20))
-        wag_event = Event(0.7, 'Your dog wags its tail.', 5)
-        lamp_event = Event(0.5, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
-        fire_event = Event(0.3, 'The lamp starts a fire.', -1000)
         home.add_events(relaxation_event)
         # The following events are chained together
+        wag_event = Event(0.7, 'Your dog wags its tail.', 5)
+        lamp_event = Event(0.5, 'Your dog\'s tail knocks over a lamp.', -10, max_occurrences=2)
         home.add_events(wag_event)    # The dog might wag its tail
         wag_event.chain(lamp_event)   # which could cause the lamp event
-        lamp_event.chain(fire_event)  # which could cause a fire
         coding_party_invitation = InventoryItem('Coding party invitation', acquire_probability=0.8)
         home.add_items(coding_party_invitation)
 
@@ -68,7 +66,9 @@ class Simple(Game):
         # Starting place
         self.location = home
 
-    def solve_math_problem(self):
+    # Activity custom functions
+
+    def solve_math_problem(self) -> int:
         m1 = randint(2, 5)
         m2 = randint(11, 19)
         product = m1 * m2
@@ -81,10 +81,10 @@ class Simple(Game):
             change = -2
         return change
 
-    def roll_dice_for_points(self):
+    def roll_dice_for_points(self) -> int:
         return randint(1, 6) + randint(1, 6)
 
-    def code_challenge(self):
+    def code_challenge(self) -> int:
         from random import random
         num = random()
         print('You compete against another programmer to see who can write the best code.')
@@ -98,17 +98,18 @@ class Simple(Game):
         print(message)
         return change
 
-    def joke_of_the_day(self):
+    def joke_of_the_day(self) -> int:
         jokes = (
-            ('Why are leopards bad at hiding?', ' Because they are always spotted .'),
-            ('What did the pirate say on his 80th birthday?', 'Aye Matey .')
+            ('Why are leopards bad at hiding?', 'Because they are always spotted.'),
+            ('What did the pirate say on his 80th birthday?', 'Aye Matey.')
         )
-        joke = choice(jokes)
-        print(joke[0])
+        joke, answer = choice(jokes)
+        print(joke)
         sleep(4)
-        print(joke[1])
+        print(answer)
         sleep(3)  # Pause for laughter
         return 5
+
 
 if __name__ == '__main__':
     game = Simple()

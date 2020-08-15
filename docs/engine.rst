@@ -4,6 +4,14 @@ engine package
 Submodules
 ----------
 
+engine.activity module
+----------------------
+
+.. automodule:: engine.activity
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 engine.event module
 -------------------
 

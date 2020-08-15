@@ -3,7 +3,12 @@ import engine.inventory_item
 
 class Activity:
     '''
-    An activity that may be available in a place.
+    An activity, offered in a place. Unlike events, which happen automatically,
+    activities are offered to the player.
+
+    :param description: a description of the activity
+    :param action: a function that implements the activity
+    :param must_have: zero or items that must be in the inventory in order for this activity to be offered
     '''
     def __init__(self, description: str, action, *must_have: engine.inventory_item.InventoryItem):
         self.description = description

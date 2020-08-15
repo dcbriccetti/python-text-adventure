@@ -10,11 +10,13 @@ Planning Your Game
 Make a list, or draw a diagram of all the places, and
 for each place:
 
-* any events that could occur there, their probabilities, and the effect an occurrence would have on your happiness
+* any *events* that could occur there, their probabilities, and the effect an occurrence would have on your happiness
 
-* any items you might find there, and the probabilities of their being found
+* any *inventory items* you might find there, and the probabilities of their being found
 
-* allowable transitions to the other places, including whether certain inventory items (such as a key) are required to go there
+* any optional *activities* offered there
+
+* *transitions* to the other places, including whether certain inventory items (such as a key) are required to go there
 
 For example, at the library there’s a chance you could 
 find a book on programming, and if you do, you then can
