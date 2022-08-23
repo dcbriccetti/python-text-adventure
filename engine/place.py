@@ -47,13 +47,15 @@ class Place:
         :param targets: a sequence of either ``Place`` or ``Transition`` objects
         :param reverse: whether to add a transitions in the opposite direction from places specified
         '''
-        for t in targets:
-            if isinstance(t, engine.transition.Transition):
-                self.transitions.append(t)
-            elif isinstance(t, Place):
-                self.transitions.append(engine.transition.Transition(t))
+        for target in targets:
+            if isinstance(target, engine.transition.Transition):
+                self.transitions.append(target)
                 if reverse:
-                    t.add_transitions(self)
+                    target.place.add_transitions(self)
+            elif isinstance(target, Place):
+                self.transitions.append(engine.transition.Transition(target))
+                if reverse:
+                    target.add_transitions(self)
 
     def __str__(self) -> str:
         return f'{self.title}: {self.description}'
