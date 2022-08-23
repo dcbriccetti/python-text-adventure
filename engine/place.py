@@ -17,10 +17,10 @@ class Place:
         Instead of providing items here, you might call the add_items method.
     '''
 
-    def __init__(self, title: str, description: str, events: Sequence[Event] = (),
+    def __init__(self, title: str, description=None, events: Sequence[Event] = (),
                  inventory_items: Sequence[InventoryItem] = ()):
         self.title = title
-        self.description = description
+        self.description = description if description else title
         self.events = list(events)
         self.inventory_items = list(inventory_items)
         self.transitions: List[engine.transition.Transition] = []
@@ -40,17 +40,20 @@ class Place:
         for activity in activities:
             self.activities.append(activity)
 
-    def add_transitions(self, *targets: Union['Place', 'engine.transition.Transition']):
+    def add_transitions(self, *targets: Union['Place', 'engine.transition.Transition'], reverse=False):
         '''
         Add one or more transitions from this place to other places.
 
         :param targets: a sequence of either ``Place`` or ``Transition`` objects
+        :param reverse: whether to add a transitions in the opposite direction from places specified
         '''
         for t in targets:
             if isinstance(t, engine.transition.Transition):
                 self.transitions.append(t)
             elif isinstance(t, Place):
                 self.transitions.append(engine.transition.Transition(t))
+                if reverse:
+                    t.add_transitions(self)
 
     def __str__(self) -> str:
         return f'{self.title}: {self.description}'
