@@ -1,8 +1,13 @@
 'Young Sheldon Adventure.'
+from random import randint
+from time import sleep
 
+from engine.activity import Activity
 from engine.game import Game
+from engine.inventory_item import InventoryItem
 from engine.place import Place
 from engine.event import Event
+from engine.transition import Transition
 
 
 class YoungSheldon(Game):
@@ -47,8 +52,20 @@ class YoungSheldon(Game):
             Event(0.6, 'You are glad to be at your place of higher learning', 5),
         )
 
+        # President Hagemeyer’s Office
+        key = InventoryItem('Private dorm room key')
+        hagemeyers = Place('President Hagemeyer’s Office', inventory_items=[key])
+
         # Dorm Room
-        dorm_room = Place('Your Dorm Room')
+        dorm_room = Place('Your Dorm Room', events=[Event(0.9, 'You have a nice rest', 15)])
+
+        # Friends’ Dorm Room
+        friends_dorm_room = Place('Oscar and Darren’s Dorm Room')
+        friends_dorm_room.add_events(
+            Event(0.3, 'Paige drops by and bums everybody out', -10, max_occurrences=1),
+            Event(0.2, 'You eat too much junk food and barf', -20),
+        )
+        friends_dorm_room.add_activities(Activity('Play video games', self.play_video_games))
 
         # Dr. Sturgis’s class
         sturgis_class = Place('Dr. Sturgis’s class', 'Your front row seat in Dr. Sturgis’s class')
@@ -59,10 +76,18 @@ class YoungSheldon(Game):
 
         # Transitions
         home.add_transitions(meemaws, university, billys, sunday_school, reverse=True)
-        university.add_transitions(dorm_room, sturgis_class, linkletters_office, reverse=True)
+        university.add_transitions(hagemeyers, sturgis_class, linkletters_office, reverse=True)
+        university.add_transitions(Transition(dorm_room, key), Transition(friends_dorm_room, key), reverse=True)
 
         # Starting place
         self.location = home
+
+    def play_video_games(self):
+        happiness_change = randint(-10, 20)  # You’re more likely to win
+        print('You sit down and take the controller.')
+        sleep(1.5)
+        print('You', 'won!' if happiness_change > 0 else 'lost.' if happiness_change < 0 else 'tied')
+        return happiness_change
 
 
 if __name__ == '__main__':
