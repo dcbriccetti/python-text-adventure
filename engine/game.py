@@ -1,6 +1,8 @@
 from random import random, choice
 from time import sleep
 from typing import Sequence, List
+
+from engine.activity import Activity
 from engine.inventory_item import InventoryItem
 from engine.transition import Transition
 from engine.place import Place
@@ -95,25 +97,27 @@ class Game:
                 exit(1)
             sleep(0.5)
 
-    def _have_all(self, must_have: Sequence[InventoryItem]):
-        missing = [mh for mh in must_have if mh not in self.inventory]
-        return not missing
+    def _have_all(self, must_have_items: Sequence[InventoryItem]) -> bool:
+        for item in must_have_items:
+            if item not in self.inventory:
+                return False
+        return True
 
-    def _available_transitions(self):
+    def _available_transitions(self) -> list[Transition]:
         return [t for t in self.location.transitions if self._have_all(t.must_have)]
 
-    def _available_activities(self, place: Place):
+    def _available_activities(self, place: Place) -> list[Activity]:
         return [a for a in place.activities if self._have_all(a.must_have)]
 
-    def _act_and_transition(self, place: Place):
+    def _act_and_transition(self, place: Place) -> None:
         activities = self._available_activities(place)
         transitions = self._available_transitions()
         print('Please choose: ')
 
-        for (index, activity) in enumerate(activities):
+        for index, activity in enumerate(activities):
             print(index + 1, activity.description)
 
-        for (index, transition) in enumerate(transitions):
+        for index, transition in enumerate(transitions):
             print(len(activities) + index + 1, transition.place.title)
 
         choice_number = _get_numeric('Choose one, or enter 0 to exit: ', len(activities) + len(transitions))
