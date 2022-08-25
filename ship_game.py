@@ -54,12 +54,12 @@ class ShipGame(Game):
 
     def visit_friends(self):
         self.friend_visits += 1
-        change = 10
         if self.friend_visits > randint(2, 3):
             print('Your friends are tired of you')
             change = -5
         else:
             print('You visit with friends and have a few laughs')
+            change = 10
         return change
 
 
