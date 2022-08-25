@@ -1,4 +1,3 @@
-from typing import List
 from random import random
 from engine.inventory_item import InventoryItem
 
@@ -18,11 +17,11 @@ class Event:
         self.message = message
         self.condition_change = condition_change
         self.remaining_occurrences = max_occurrences
-        self.chained_events: List[Event] = []
-        self.else_events: List[Event] = []
-        self.inventory_items: List[InventoryItem] = []
+        self.chained_events: list[Event] = []
+        self.else_events: list[Event] = []
+        self.inventory_items: list[InventoryItem] = []
 
-    def process(self, inventory: List[InventoryItem]) -> int:
+    def process(self, inventory: list[InventoryItem]) -> int:
         '''
         Process the event.
 

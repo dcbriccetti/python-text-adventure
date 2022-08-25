@@ -1,47 +1,12 @@
 from random import random, choice
 from time import sleep
-from typing import Sequence, List
+from typing import Sequence
 
 from engine.activity import Activity
 from engine.inventory_item import InventoryItem
 from engine.transition import Transition
 from engine.place import Place
-from engine.event import Event
-
-
-def _dump_event(event: Event, is_else, condition_description, level=1):
-    else_msg = 'Else ' if is_else else ''
-    print(('\t' * level) + else_msg + event.str(condition_description))
-    for item in event.inventory_items:
-        print(('\t' * (level + 1)) + f'Item: {item}')
-
-    for event in event.else_events:
-        _dump_event(event, True, condition_description, level + 1)
-
-    for event in event.chained_events:
-        _dump_event(event, False, condition_description, level + 1)
-
-
-def _dump_place(condition_description, place: Place, explored: List[Place]):
-    explored.append(place)
-    print(place)
-
-    for event in place.events:
-        _dump_event(event, False, condition_description)
-
-    for item in place.inventory_items:
-        print(f'\tItem: {item}')
-
-    for transition in place.transitions:
-        print(f'\tTransition: {transition}')
-
-    for activity in place.activities:
-        print(f'\tActivity: {activity}')
-
-    for transition in place.transitions:
-        if transition.place not in explored:
-            explored.append(transition.place)
-            _dump_place(condition_description, transition.place, explored)
+from engine.dumper import dump_place
 
 
 class Game:
@@ -78,7 +43,7 @@ class Game:
     def dump(self):
         'dump the contents of the game, without playing it.'
         print(self.introduction)
-        _dump_place(self.condition_description, self.location, [])
+        dump_place(self.condition_description, self.location, [])
 
     def _acquire_items(self):
         acquired_items = [i for i in self.location.inventory_items if random() < i.acquire_probability]
@@ -112,7 +77,7 @@ class Game:
     def _act_and_transition(self, place: Place) -> None:
         activities = self._available_activities(place)
         transitions = self._available_transitions()
-        print('Please choose: ')
+        print('\nPlease choose: ')
 
         for index, activity in enumerate(activities):
             print(index + 1, activity.description)

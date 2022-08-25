@@ -1,4 +1,4 @@
-from typing import List, Sequence, Union
+from typing import Sequence, Union
 import engine.transition
 from engine.event import Event
 from engine.inventory_item import InventoryItem
@@ -23,8 +23,8 @@ class Place:
         self.description = description if description else title
         self.events = list(events)
         self.inventory_items = list(inventory_items)
-        self.transitions: List[engine.transition.Transition] = []
-        self.activities: List[Activity] = []
+        self.transitions: list[engine.transition.Transition] = []
+        self.activities: list[Activity] = []
 
     def add_events(self, *events: Event):
         'Add one or more events to this place.'
