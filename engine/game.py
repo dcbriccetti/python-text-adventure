@@ -2,6 +2,9 @@ from random import random, choice
 from time import sleep
 from typing import Sequence
 
+from colorama import Fore, init as init_colorama
+
+from engine.color import colored, bright
 from engine.activity import Activity
 from engine.inventory_item import InventoryItem
 from engine.transition import Transition
@@ -21,17 +24,18 @@ class Game:
         self.inventory = []
         self.introduction = ''
         self.location = None
+        init_colorama()
 
     def play(self):
         'Play the game.'
-        print(self.introduction)
+        print(bright(self.introduction))
         sleep(0.5)
         last_location = None
 
         while True:
             if self.location != last_location:
                 print()
-                print(self.location.description)
+                print(bright(self.location.description))
                 self._acquire_items()
                 self._process_events()
 
@@ -80,10 +84,10 @@ class Game:
         print('\nPlease choose: ')
 
         for index, activity in enumerate(activities):
-            print(index + 1, activity.description)
+            print(colored(Fore.GREEN, str(index + 1)), activity.description)
 
         for index, transition in enumerate(transitions):
-            print(len(activities) + index + 1, transition.place.title)
+            print(colored(Fore.GREEN, str(len(activities) + index + 1)), transition.place.title)
 
         choice_number = _get_numeric('Choose one, or enter 0 to exit: ', len(activities) + len(transitions))
         if choice_number == 0:
