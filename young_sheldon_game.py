@@ -46,7 +46,7 @@ class YoungSheldon(Game):
         )
 
         # University
-        university = Place('Your university')
+        university = Place('East Texas Tech')
         university.add_events(
             Event(0.1, 'Your mother embarrasses you', -5),
             Event(0.6, 'You are glad to be at your place of higher learning', 5),
