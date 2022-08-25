@@ -1,11 +1,18 @@
-from typing import Sequence, Union
+from dataclasses import dataclass, field
+from typing import Union, Optional
 import engine.transition
 from engine.event import Event
 from engine.inventory_item import InventoryItem
 from engine.activity import Activity
 
 
+@dataclass
 class Place:
+    title: str
+    description: Optional[str] = None
+    events: list[Event] = field(default_factory=list)
+    inventory_items: list[InventoryItem] = field(default_factory=list)
+
     '''
     A place in the game, with a title, description, and events that can occur there.
 
@@ -17,12 +24,9 @@ class Place:
         Instead of providing items here, you might call the add_items method.
     '''
 
-    def __init__(self, title: str, description=None, events: Sequence[Event] = (),
-                 inventory_items: Sequence[InventoryItem] = ()):
-        self.title = title
-        self.description = description if description else title
-        self.events = list(events)
-        self.inventory_items = list(inventory_items)
+    def __post_init__(self):
+        if not self.description:
+            self.description = self.title
         self.transitions: list[engine.transition.Transition] = []
         self.activities: list[Activity] = []
 

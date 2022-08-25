@@ -1,8 +1,15 @@
 from random import random
+from dataclasses import dataclass
 from engine.inventory_item import InventoryItem
 
 
+@dataclass
 class Event:
+    probability: float
+    message: str
+    condition_change: int | dict[str, float | int]
+    max_occurrences: int = 100_000
+
     '''
     A game event, including the probability of its happening.
 
@@ -11,12 +18,8 @@ class Event:
     :param condition_change: how the event affects the player’s condition
     :param max_occurrences: a limit on the number of times the event may occur
     '''
-
-    def __init__(self, probability: float, message: str, condition_change: int, max_occurrences: int = 100000):
-        self.probability = probability
-        self.message = message
-        self.condition_change = condition_change
-        self.remaining_occurrences = max_occurrences
+    def __post_init__(self):
+        self.remaining_occurrences = self.max_occurrences
         self.chained_events: list[Event] = []
         self.else_events: list[Event] = []
         self.inventory_items: list[InventoryItem] = []
