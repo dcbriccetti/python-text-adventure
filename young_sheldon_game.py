@@ -11,11 +11,18 @@ from engine.transition import Transition
 
 
 class YoungSheldon(Game):
+    condition_description: str
+    introduction: str
+
     def __init__(self):
         super(YoungSheldon, self).__init__()
         self.condition_description = 'Happiness'
         self.introduction = 'Welcome to Young Sheldon Adventure'
 
+        home: Place = self._define_game()
+        self.location = home
+
+    def _define_game(self) -> Place:
         # Home
         home = Place('Home', 'You are at home.')
         relaxation_event = Event(0.75, 'You play with your trains.', 5)
@@ -79,8 +86,7 @@ class YoungSheldon(Game):
         university.add_transitions(hagemeyers, sturgis_class, linkletters_office, reverse=True)
         university.add_transitions(Transition(dorm_room, key), Transition(friends_dorm_room, key), reverse=True)
 
-        # Starting place
-        self.location = home
+        return home
 
     def play_video_games(self):
         happiness_change = randint(-10, 20)  # You’re more likely to win
