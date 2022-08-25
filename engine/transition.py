@@ -1,5 +1,5 @@
-import engine.place
-import engine.inventory_item
+from engine.place import Place
+from engine.inventory_item import InventoryItem
 
 
 class Transition:
@@ -10,7 +10,7 @@ class Transition:
     :param must_have: zero or more inventory items the player
         must possess in order to make the transition
     '''
-    def __init__(self, place: engine.place.Place, *must_have: engine.inventory_item.InventoryItem):
+    def __init__(self, place: Place, *must_have: InventoryItem):
         self.place = place
         self.must_have = must_have
 
