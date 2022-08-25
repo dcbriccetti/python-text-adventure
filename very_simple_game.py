@@ -17,8 +17,7 @@ class VerySimple(Game):
         school = Place('School', 'You are at school.')
 
         # Transitions
-        home.add_transitions(school)
-        school.add_transitions(home)
+        home.add_transitions(school, reverse=True)
 
         # Starting place
         self.location = home
