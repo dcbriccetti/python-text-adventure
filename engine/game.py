@@ -1,4 +1,4 @@
-from random import random, choice
+from random import random
 from time import sleep
 from typing import Sequence
 
@@ -6,7 +6,9 @@ from colorama import Fore, init as init_colorama
 
 from engine.color import colored, bright
 from engine.activity import Activity
+from engine.event import Event
 from engine.inventory_item import InventoryItem
+from engine.player_attributes import PlayerAttributes
 from engine.transition import Transition
 from engine.place import Place
 from engine.dumper import dump_place
@@ -18,13 +20,14 @@ class Game:
     See simple_game.py or ship_game.py for examples.
     '''
 
-    def __init__(self):
+    def __init__(self, default_attribute='Health'):
         self.condition = 100
-        self.condition_description = 'Health'
+        self.attributes = PlayerAttributes({})
         self.inventory = []
         self.introduction = ''
         self.location = None
         init_colorama()
+        Event.default_attribute = default_attribute
 
     def play(self):
         'Play the game.'
@@ -33,21 +36,22 @@ class Game:
         last_location = None
 
         while True:
+            print()
+            print(bright(self.location.description))
             if self.location != last_location:
-                print()
-                print(bright(self.location.description))
                 self._acquire_items()
                 self._process_events()
 
-                print(f'{self.condition_description}: {self.condition}, Items:',
-                      ', '.join([i.name for i in self.inventory]) if self.inventory else 'None')
+            print(self.attributes)
+            print(f'Items:',
+                ', '.join([i.name for i in self.inventory]) if self.inventory else 'None')
             last_location = self.location
             self._act_and_transition(self.location)
 
     def dump(self):
         'dump the contents of the game, without playing it.'
         print(self.introduction)
-        dump_place(self.condition_description, self.location, [])
+        dump_place(self.location, [])
 
     def _acquire_items(self):
         acquired_items = [i for i in self.location.inventory_items if random() < i.acquire_probability]
@@ -59,11 +63,7 @@ class Game:
 
     def _process_events(self):
         for event in self.location.events:
-            self.condition += event.process(self.inventory)
-            if self.condition <= 0:
-                goodbyes = ("That's it for you!", 'You lose.', 'So long.')
-                print(choice(goodbyes))
-                exit(1)
+            self.attributes += event.process(self.inventory)
             sleep(0.5)
 
     def _have_all(self, must_have_items: Sequence[InventoryItem]) -> bool:
@@ -96,8 +96,9 @@ class Game:
             print()
             activity = activities[choice_number - 1]
             change = activity.run()
-            print(f'({"+" if change > 0 else ""}{change})')
-            self.condition += change
+            if isinstance(change, int):
+                print(f'({"+" if change > 0 else ""}{change})')
+                self.attributes += {getattr(Event, 'default_attribute'): change}
         else:
             self.location = transitions[choice_number - len(activities) - 1].place
 

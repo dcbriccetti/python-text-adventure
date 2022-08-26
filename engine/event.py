@@ -1,14 +1,18 @@
 from random import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
 from engine.inventory_item import InventoryItem
+from engine.player_attributes import PlayerAttributes, AttrsType
 
 
 @dataclass
 class Event:
     probability: float
     message: str
-    condition_change: int | dict[str, float | int]
+    flexible_condition_change: int | AttrsType
     max_occurrences: int = 100_000
+
+    condition_change: PlayerAttributes = field(init=False)
 
     '''
     A game event, including the probability of its happening.
@@ -23,29 +27,37 @@ class Event:
         self.chained_events: list[Event] = []
         self.else_events: list[Event] = []
         self.inventory_items: list[InventoryItem] = []
+        fcc: int | AttrsType = self.flexible_condition_change  # Shorter name
+        attr = getattr(Event, 'default_attribute')
+        chg = PlayerAttributes(fcc if isinstance(fcc, dict) else {attr: fcc})
+        self.condition_change = chg
 
-    def process(self, inventory: list[InventoryItem]) -> int:
+    def process(self, inventory: list[InventoryItem]) -> PlayerAttributes:
         '''
         Process the event.
 
         :param inventory: the player’s inventory, which may be changed by the event
-        :return: the change in condition, or 0
+        :return: the changes in condition
         '''
-        condition_change_sum = 0
+        attrs = PlayerAttributes()
         if self.remaining_occurrences and random() < self.probability:
             self.remaining_occurrences -= 1
-            change_sign = '+' if self.condition_change > 0 else ''
-            print(f'{self.message} ({change_sign}{self.condition_change})')
-            condition_change_sum += self.condition_change
+            self._display_impact()
+            attrs += self.condition_change
             for item in self.inventory_items:
                 inventory.append(item)
             for event in self.chained_events:
-                condition_change_sum += event.process(inventory)
+                attrs += event.process(inventory)
         else:
             for event in self.else_events:
-                condition_change_sum += event.process(inventory)
+                attrs += event.process(inventory)
 
-        return condition_change_sum
+        return attrs
+
+    def _display_impact(self):
+        for condition, value in self.condition_change.items():
+            change_sign = '+' if value > 0 else ''
+            print(f'{self.message}   {condition}: {change_sign}{value}')
 
     def add_items(self, *items: InventoryItem):
         'Add one or more inventory items to this event.'

@@ -1,13 +1,11 @@
 'A very simple example game using the text adventure engine.'
-
 from engine.game import Game
 from engine.place import Place
 
 
 class VerySimple(Game):
     def __init__(self):
-        super(VerySimple, self).__init__()
-        self.condition_description = 'Health'
+        super().__init__()
         self.introduction = 'Welcome to a Very Simple Game'
 
         # Home

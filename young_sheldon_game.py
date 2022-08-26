@@ -7,17 +7,23 @@ from engine.game import Game
 from engine.inventory_item import InventoryItem
 from engine.place import Place
 from engine.event import Event
+from engine.player_attributes import PlayerAttributes
 from engine.transition import Transition
 
 
 class YoungSheldon(Game):
-    condition_description: str
     introduction: str
+    attributes: PlayerAttributes
 
     def __init__(self):
-        super(YoungSheldon, self).__init__()
-        self.condition_description = 'Happiness'
+        super().__init__('Happiness')
         self.introduction = 'Welcome to Young Sheldon Adventure'
+        self.attributes = PlayerAttributes({
+            'Health'      : 100,
+            'Happiness'   : 100,
+            'Gaming Skill':   0,
+            'Confidence'  : 100,
+        })
 
         home: Place = self._define_game()
         self.location = home
@@ -40,7 +46,7 @@ class YoungSheldon(Game):
         meemaws = Place('Meemaw’s house')
         meemaws.add_events(
             Event(0.4, 'Meemaw makes cookies', 20),
-            Event(0.3, 'We play video games', 20),
+            Event(0.3, 'We play video games', {'Gaming Skill': 10}),
             Event(0.05, 'Meemaw is mad at you', -10),
         )
 
@@ -48,8 +54,8 @@ class YoungSheldon(Game):
         sunday_school = Place('Sunday School')
         sunday_school.add_events(
             Event(0.2, 'Paige makes you mad', -20),
-            Event(0.3, 'You win an argument with Pastor Jeff about the existence of God', 20),
-            Event(0.1, 'Billy says something funny', 5),
+            Event(0.3, 'You win an argument with Pastor Jeff', {'Confidence': 20}),
+            Event(0.2, 'Billy says something funny', 5),
         )
 
         # University

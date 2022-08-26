@@ -12,8 +12,7 @@ from engine.transition import Transition
 
 class Simple(Game):
     def __init__(self):
-        super(Simple, self).__init__()
-        self.condition_description = 'Happiness'
+        super(Simple, self).__init__('Happiness')
         self.introduction = 'Welcome to Coding Party'
 
         # Home
